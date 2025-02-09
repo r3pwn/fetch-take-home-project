@@ -42,7 +42,7 @@ export default function InputForm() {
   }
 
   return (
-    <div className="flex items-center justify-items-center min-h-screen p-8">
+    <div className="flex items-center justify-items-center min-h-screen p-8 pawprint-bg">
       <main className="flex flex-col gap-8 row-start-2 items-center ml-auto mr-auto">
         <Card>
           <CardHeader>
