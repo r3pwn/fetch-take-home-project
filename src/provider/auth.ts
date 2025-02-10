@@ -1,4 +1,4 @@
-import { redirect, unauthorized } from "next/navigation";
+import { redirect } from "next/navigation";
 
 /**
  * An auth cookie, `fetch-access-token`, will be included in the response headers. This will expire in 1 hour.

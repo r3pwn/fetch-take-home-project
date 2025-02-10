@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { login } from "@/provider/auth"
 import { redirect } from "next/navigation"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 
 const LoginSchema = z.object({
   name: z.string().min(1, {

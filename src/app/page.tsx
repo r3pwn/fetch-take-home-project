@@ -11,12 +11,13 @@ import { useDogMatch } from '@/hooks/useDogMatch';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
+const ITEMS_PER_PAGE = 10;
+
 export default function Home() {
   const [dogs, setDogs] = useState<Dog[]>([]);
   const [dogMatch, setDogMatch] = useState<Dog | undefined>(undefined);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { matches, addMatch, removeMatch } = useDogMatch();
 
   const { selectedBreeds, sortBy, sortOrder } = useSearchFilters(
@@ -27,12 +28,12 @@ export default function Home() {
     const fetchDogs = async () => {
       const params = {
         breeds: selectedBreeds.length ? selectedBreeds : undefined,
-        size: itemsPerPage,
-        from: (page - 1) * itemsPerPage,
+        size: ITEMS_PER_PAGE,
+        from: (page - 1) * ITEMS_PER_PAGE,
         sort: `${sortBy}:${sortOrder}`,
       };
       let result = await searchDogs(params);
-      if (page > Math.ceil(result.total / itemsPerPage)) {
+      if (page > Math.ceil(result.total / ITEMS_PER_PAGE)) {
         result = await searchDogs({ ...params, from: 0 });
         setPage(1);
       }
@@ -72,7 +73,7 @@ export default function Home() {
         ))}
       </div>
       <div className="flex justify-between mt-4">
-        <SearchPagination currentPage={page} totalPages={Math.ceil(total / itemsPerPage)} onPageChange={setPage} />
+        <SearchPagination currentPage={page} totalPages={Math.ceil(total / ITEMS_PER_PAGE)} onPageChange={setPage} />
       </div>
       <Dialog open={!!dogMatch} onOpenChange={() => setDogMatch(undefined)}>
         {dogMatch && (
