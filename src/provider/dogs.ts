@@ -50,6 +50,25 @@ export const getDogs = async (ids: string[]): Promise<Dog[]> => {
 };
 
 /**
+ * @param ids - an array of (no more than 100) dog IDs
+ * @returns Returns a match
+ */
+export const getDogMatch = async (ids: string[]): Promise<string> => {
+  const res = await authWrapper(
+    fetch(`${process.env.NEXT_PUBLIC_SERVICE_HOST}/dogs/match`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(ids),
+    })
+  );
+  const matchResult = (await res.json()) as { match: string };
+  return matchResult.match;
+};
+
+/**
  * Searches for dogs based on the provided query parameters.
  *
  * @param {Object} params - The search parameters.
