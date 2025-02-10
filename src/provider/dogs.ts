@@ -1,12 +1,22 @@
 import { authWrapper } from "./auth";
 
-interface Dog {
+export interface Dog {
   id: string;
   img: string;
   name: string;
   age: number;
   zip_code: string;
   breed: string;
+}
+
+export interface DogSearchParams {
+  breeds?: string[];
+  zipCodes?: string[];
+  ageMin?: number;
+  ageMax?: number;
+  size?: number;
+  from?: number;
+  sort?: string;
 }
 
 /**
@@ -28,6 +38,9 @@ export const getBreeds = async (): Promise<string[]> => {
 export const getDogs = async (ids: string[]): Promise<Dog[]> => {
   const res = await authWrapper(
     fetch(`${process.env.NEXT_PUBLIC_SERVICE_HOST}/dogs`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
       method: "POST",
       credentials: "include",
       body: JSON.stringify(ids),
@@ -45,7 +58,7 @@ export const getDogs = async (ids: string[]): Promise<Dog[]> => {
  * @param {number} [params.ageMin] - The minimum age to filter on
  * @param {number} [params.ageMax] - The maximum age to filter on
  * @param {number} [params.size] - The number of results to return (defaults to 25)
- * @param {string} [params.from] - A cursor to be used when paginating results (optional).
+ * @param {number} [params.from] - A cursor to be used when paginating results (optional).
  * @param {string} [params.sort] - The field by which to sort results, and the direction of the sort; in the format `sort=field:[asc|desc]`.
  * @returns {Promise<Object>} Returns an object with the following properties:
  * - resultIds: An array of dog IDs matching your query.
@@ -53,15 +66,9 @@ export const getDogs = async (ids: string[]): Promise<Dog[]> => {
  * - next: A query to request the next page of results (if one exists).
  * - prev: A query to request the previous page of results (if one exists).
  */
-export const searchDogs = async (params: {
-  breeds?: string[];
-  zipCodes?: string[];
-  ageMin?: number;
-  ageMax?: number;
-  size?: number;
-  from?: string;
-  sort?: string;
-}): Promise<{
+export const searchDogs = async (
+  params: DogSearchParams
+): Promise<{
   resultIds: string[];
   total: number;
   next?: string;
@@ -85,7 +92,7 @@ export const searchDogs = async (params: {
     query.append("size", params.size.toString());
   }
   if (params.from) {
-    query.append("from", params.from);
+    query.append("from", params.from.toString());
   }
   if (params.sort) {
     query.append("sort", params.sort);
@@ -93,7 +100,7 @@ export const searchDogs = async (params: {
 
   const apiQuery = query.size > 0 ? `?${query.toString()}` : "";
   const res = await authWrapper(
-    fetch(`${process.env.NEXT_PUBLIC_SERVICE_HOST}/dogs/search?${apiQuery}`, {
+    fetch(`${process.env.NEXT_PUBLIC_SERVICE_HOST}/dogs/search${apiQuery}`, {
       credentials: "include",
     })
   );
