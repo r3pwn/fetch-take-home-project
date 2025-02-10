@@ -8,6 +8,12 @@ First, we have to install the dependencies:
 npm install --legacy-peer-deps
 ```
 
+then we set the environment variables in the .env file:
+
+```bash
+NEXT_PUBLIC_SERVICE_HOST=<your_service_host>
+```
+
 Then we can run the development server:
 
 ```bash
