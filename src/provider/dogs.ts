@@ -96,10 +96,14 @@ export const searchDogs = async (
   const query = new URLSearchParams();
 
   if (params.breeds) {
-    query.append("breeds", params.breeds.join(","));
+    for (const breed of params.breeds) {
+      query.append("breeds", breed);
+    }
   }
   if (params.zipCodes) {
-    query.append("zipCodes", params.zipCodes.join(","));
+    for (const zipCode of params.zipCodes) {
+      query.append("zipCodes", zipCode);
+    }
   }
   if (params.ageMin !== undefined) {
     query.append("ageMin", params.ageMin.toString());
